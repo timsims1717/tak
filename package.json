@@ -1,0 +1,17 @@
+{
+  "name": "tak",
+  "version": "1.0.0",
+  "description": "The game of Tak!",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Tim Sims",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "ws": "^2.2.3"
+  }
+}

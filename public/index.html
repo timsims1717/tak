@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html ng-app="Tak">
+<head>
+	<link rel="stylesheet" href="style.css"></link>
+</head>
+<body ng-controller="TakController">
+	<div class="overlay-page" ng-show="joinGameRequest">
+		<div class="overlay-box">
+			<ul class="request-list">
+				<li ng-repeat="g in gameRequests">
+					<span class="span-header">{{ g.hostName }} has challenged you to a game of Tak!</span>
+					<button ng-click="acceptCreateRequest(g.gameId)">Accept</button>
+					<button ng-click="rejectCreateRequest(g.gameId)">Reject</button>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="overlay-page" ng-hide="playerCreated">
+		<div class="overlay-box">
+			<span class="span-header">Enter your player name:</span>
+			<input type="text" ng-model="inputPlayerName"></input><br>
+			<button ng-click="createPlayer()">Join</button>
+			<span class="error-message">{{ inputPlayerNameMessage }}</span>
+		</div>
+	</div>
+	<div class="main-div">
+		<div class="players-div">
+			<ul class="player-list">
+				<li ng-repeat="p in currentPlayers">
+					<button ng-click="sendGameRequest(p)" ng-disabled="disableRequest[$index]">Play with {{ p }}</button><span class="game-status"> {{ gameStatus[$index] }}</span>
+				</li>
+			</ul>
+		</div>
+		<div class="tak-div">
+			<ul class="tak-game-list">
+				<li ng-repeat="(gIndex, g) in games" class="tak-game">
+					<div class="tak-main-area">
+						<h4 class="tak-header">{{ g.you }} vs. {{ g.opponent }}</h4>
+						<div class="tak-stack">
+						</div>
+						<div class="tak-board">
+							<ul class="tak-rows"><li ng-repeat="(rIndex, r) in g.game_state.board" class="tak-row">
+								<ul class="tak-cols">
+									<li ng-repeat="(cIndex, c) in r" class="tak-board-slot">
+										<div ng-click="setPiece(gIndex, rIndex, cIndex)" ng-class="topPieceClass(gIndex, rIndex, cIndex)"></div>
+									</li>
+								</ul>
+							</li></ul>
+							<table class="tak-grid-lines">
+								<tr><td></td><td></td><td></td><td></td></tr>
+								<tr><td></td><td></td><td></td><td></td></tr>
+								<tr><td></td><td></td><td></td><td></td></tr>
+								<tr><td></td><td></td><td></td><td></td></tr>
+							</table>
+						</div>
+					</div>
+					<div class="tak-status-area">
+						<div ng-show="g.your_turn">Your Turn!</div>
+						<button ng-disabled="!nextMove[gIndex].ready" ng-click="submitMove(gIndex)">Ready</button><br>
+						<button ng-disabled="!nextMove[gIndex].ready" ng-click="cancelMove(gIndex)">Cancel</button>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="chat-div">
+			<ul class="chat-messages-box">
+				<li ng-repeat="m in chatMessages">{{ m.name }}: {{ m.message }}</li>
+			</ul>
+			<input type="text" ng-model="chatMessageBox">
+			<button ng-click="sendChatAllMessage()">Send</button>
+		</div>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.js"></script>
+	<script src="controller.js"></script>
+	<script src="service.js"></script>
+</body>
+</html>
